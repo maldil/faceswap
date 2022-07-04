@@ -249,9 +249,8 @@ class Mask(Editor):
                        np.array([[1 / self._globals.current_frame["scale"], 0., 0.],
                                  [0., 1 / self._globals.current_frame["scale"], 0.],
                                  [0., 0., 1.]]))
-        in_matrix = np.dot(adjustments[0],
-                           np.concatenate((mask.affine_matrix, np.array([[0., 0., 1.]]))))
-        affine_matrix = np.dot(in_matrix, adjustments[1])
+        affine_matrix = np.linalg.multi_dot(adjustments[0],
+                           np.concatenate((mask.affine_matrix, np.array([[0., 0., 1.]]))), adjustments[1])
 
         # Get the size of the mask roi box in the frame
         side_sizes = (scaled_mask_roi[1][0] - scaled_mask_roi[0][0],
